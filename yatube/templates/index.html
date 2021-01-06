@@ -2,6 +2,9 @@
 {% block title %}Последние обновления на сайте{% endblock %}
 {% block header %}Последние обновления на сайте{% endblock %}
 {% block content %}
+{% if user.is_authenticated %}
+    <a href="/new">Новая запись</a>
+{% endif %}
 
 {% for post in posts %}
     <h3>

@@ -24,13 +24,19 @@ SECRET_KEY = 'lsu+wsu*1ouuum5y=qis$uy%dphtafqsl*jco_lsi&2$g&e8gv'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "[::1]",
+    "testserver",
+]
 
 # Application definition
 
 INSTALLED_APPS = [
 
     'posts',
+    'users',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -111,8 +117,18 @@ USE_L10N = True
 
 USE_TZ = True
 
+#  подключаем движок filebased.EmailBackend
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+# указываем директорию, в которую будут складываться файлы писем
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
+
+
+LOGIN_URL = "/auth/login/"
+LOGIN_REDIRECT_URL = "index"
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
+
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
