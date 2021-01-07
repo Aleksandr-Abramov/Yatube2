@@ -130,4 +130,5 @@ dmypy.json
 .idea/
 /yatube/static/
 /yatube/posts/static/
+send_emails/
 

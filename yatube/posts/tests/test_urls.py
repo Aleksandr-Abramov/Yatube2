@@ -16,6 +16,13 @@ class StaticURLTests(TestCase):
         cls.list_pages = {
             reverse("index"): "index.html",
             reverse("group_post", args=["test-lev"]): "group.html",
+            reverse("new_post"): "new.html",
+            reverse("profile", args=[cls.user]): "profile.html",
+            reverse("post", args=[cls.user, 1]): "post.html",
+            reverse("post_edit", args=[cls.user, 1]): "post_new.html",
+            "/about/author/": "about/author.html",
+            "/about/tech/": "about/tech.html",
+
         }
 
         cls.group = Group.objects.create(
@@ -50,9 +57,26 @@ class StaticURLTests(TestCase):
             self.assertTemplateUsed(response, templates,
                                     f"Шаблон {templates} не работае")
 
+    # def test_abouth(self):
+    #     response = self.guest_client.get("/about/author/")
+    #     print(response)
+    #     self.assertEqual(response.status_code, 200)
+
+    # def test_new_redirect(self):
+    #     form_data = {
+    #         "text": "test-text",
+    #         "group": self.group.id
+    #     }
+    #     response = self.authorized_user.post(
+    #         reverse("post_edit", args=[self.user, 1, "edit/"]),
+    #         data=form_data,
+    #         follow=True)
+    #     self.assertRedirects(response, "Alex/1/edit/")
+
     # def test_index_url(self):
     #     """Тест index.html код 200"""
-    #     response = self.guest_client.get(reverse("index"))
+    #     # "about/author/": "about/author.html"
+    #     response = self.guest_client.get("about/author/")
     #     self.assertEqual(response.status_code, 200, "Не возврощает код 200")
 
     # def test_index_page_template(self):
