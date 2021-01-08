@@ -49,13 +49,34 @@ class ViewContentTest(TestCase):
         self.assertEqual(content, expected_content,
                          "Контекст group.html не верен")
 
-    def test_new_form(self):
-        """Проверка полей формы new.html"""
+    def test_post_view_content(self):
+        """Проверка контента post.html"""
+        response = self.authorized_user.get(
+            reverse("post", kwargs={"username": self.user, "post_id": 1}))
+        content = self.post
+        expected_content = response.context.get("post")
+        self.assertEqual(content, expected_content)
+
+    def test_new_post_form(self):
+        """Проверка полей формы для new_post add_or_change_post.html"""
         fields_list = {
             "text": forms.fields.CharField,
             "group": forms.fields.ChoiceField,
         }
-        response = self.guest_client.get(reverse("new_post"))
+        response = self.authorized_user.get(reverse("new_post"))
+        for field, field_widget in fields_list.items():
+            form_field = response.context.get('form').fields.get(field)
+            self.assertIsInstance(form_field, field_widget)
+
+    def test_post_edit_form(self):
+        """Проверка полей формы для post_edit add_or_change_post.html"""
+        fields_list = {
+            "text": forms.fields.CharField,
+            "group": forms.fields.ChoiceField,
+        }
+        response = self.authorized_user.get(
+            reverse("post_edit", args=[self.user, self.post.id]))
+
         for field, field_widget in fields_list.items():
             form_field = response.context.get('form').fields.get(field)
             self.assertIsInstance(form_field, field_widget)

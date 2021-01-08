@@ -32,7 +32,8 @@ def group_posts(request, slug):
     }
     return render(request, "group.html", context)
 
-# @login_required
+
+@login_required
 def new_post(request):
     """Страница оздание поста new"""
     if request.method != "POST":
@@ -40,7 +41,7 @@ def new_post(request):
         context = {
             "form": form
         }
-        return render(request, "new.html", context)
+        return render(request, "add_or_change_post.html", context)
 
     form = PostForm(request.POST)
     if form.is_valid():
@@ -51,7 +52,7 @@ def new_post(request):
 
 
 def profile(request, username):
-    """Профайл пользователя"""
+    """Профайл пользователя User and Post"""
     user = get_object_or_404(User, username=username)
     posts = user.posts.all()
     paginator = Paginator(posts, 10)
@@ -59,25 +60,22 @@ def profile(request, username):
     page = paginator.get_page(page_number)
     context = {
         "user": user,
-        "page": page
+        "page": page,
     }
     return render(request, "profile.html", context)
 
 
 def post_view(request, username, post_id):
-    """Просмотр записи"""
+    """Просмотр записи Post"""
     post = get_object_or_404(Post, id=post_id)
     context = {
         "post": post
     }
     return render(request, "post.html", context)
 
-
+@login_required
 def post_edit(request, username, post_id):
-    # тут тело функции. Не забудьте проверить,
-    # что текущий пользователь — это автор записи.
-    # В качестве шаблона страницы редактирования укажите шаблон создания новой записи
-    # который вы создали раньше (вы могли назвать шаблон иначе)
+    """Редактирование поста Post"""
     post = get_object_or_404(Post, id=post_id)
     if request.method != "POST":
         form = PostForm(instance=post)
@@ -85,7 +83,7 @@ def post_edit(request, username, post_id):
             "form": form,
             "is_edit": True,
         }
-        return render(request, "post_new.html", context)
+        return render(request, "add_or_change_post.html", context)
     form = PostForm(request.POST or None, files=request.FILES or None, instance=post)
     if form.is_valid():
         change_post = form.save(commit=False)

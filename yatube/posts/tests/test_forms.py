@@ -60,7 +60,7 @@ class PostFormTest(TestCase):
             follow=True
         )
         self.assertEqual(response.status_code, 200,
-                         "Страница post_new.html не отвечает")
+                         "Страница add_or_change_post.html не отвечает")
         self.assertEqual(Post.objects.first().text, form_data["text"],
                          "Пост не миняется.")
         self.assertRedirects(

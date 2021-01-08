@@ -16,12 +16,12 @@ class StaticURLTests(TestCase):
         cls.list_pages = {
             reverse("index"): "index.html",
             reverse("group_post", args=["test-lev"]): "group.html",
-            reverse("new_post"): "new.html",
+            # reverse("new_post"): "add_or_change_post.html",
             reverse("profile", args=[cls.user]): "profile.html",
             reverse("post", args=[cls.user, 1]): "post.html",
-            reverse("post_edit", args=[cls.user, 1]): "post_new.html",
-            "/about/author/": "about/author.html",
-            "/about/tech/": "about/tech.html",
+            # reverse("post_edit", args=[cls.user, 1]): "add_or_change_post.html",
+            reverse("about:author"): "about/author.html",
+            reverse("about:tech"): "about/tech.html"
 
         }
 
@@ -57,10 +57,25 @@ class StaticURLTests(TestCase):
             self.assertTemplateUsed(response, templates,
                                     f"Шаблон {templates} не работае")
 
-    # def test_abouth(self):
-    #     response = self.guest_client.get("/about/author/")
-    #     print(response)
-    #     self.assertEqual(response.status_code, 200)
+    def test_new_post_200(self):
+        """Проверка статус код 200 new_post"""
+        response = self.authorized_user.get(reverse("new_post"))
+        self.assertEqual(response.status_code, 200)
+
+    def test_post_edit_200(self):
+        """Проверка статус код 200 post_edit"""
+        response = self.authorized_user.get(reverse("post_edit", args=[self.user, 1]))
+        self.assertEqual(response.status_code, 200)
+
+    def test_not_authorized_user_new_post_redirect(self):
+        """Проверка статус код 302 редирект new_post"""
+        response = self.guest_client.get(reverse("new_post"))
+        self.assertEqual(response.status_code, 302)
+
+    def test_not_authorized_user_post_edit_redirect(self):
+        """Проверка статус код 302 редирект post_edit"""
+        response = self.guest_client.get(reverse("post_edit", args=[self.user, 1]))
+        self.assertEqual(response.status_code, 302)
 
     # def test_new_redirect(self):
     #     form_data = {
