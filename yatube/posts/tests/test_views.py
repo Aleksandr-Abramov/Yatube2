@@ -8,6 +8,7 @@ from ..models import Post, Group
 
 
 class ViewContentTest(TestCase):
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -29,7 +30,6 @@ class ViewContentTest(TestCase):
     def setUp(self) -> None:
         """Тестовые пользователи"""
         self.guest_client = Client()
-        self.user = get_user_model().objects.create_user(username="Alex")
         self.authorized_user = Client()
         self.authorized_user.force_login(self.user)
 
@@ -75,7 +75,7 @@ class ViewContentTest(TestCase):
             "group": forms.fields.ChoiceField,
         }
         response = self.authorized_user.get(
-            reverse("post_edit", args=[self.user, self.post.id]))
+            reverse("post_edit", args=["Leon", self.post.id]))
 
         for field, field_widget in fields_list.items():
             form_field = response.context.get('form').fields.get(field)

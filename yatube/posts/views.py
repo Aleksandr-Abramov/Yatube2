@@ -35,7 +35,7 @@ def group_posts(request, slug):
 
 @login_required
 def new_post(request):
-    """Страница оздание поста new"""
+    """Страница создание поста new"""
     if request.method != "POST":
         form = PostForm()
         context = {
@@ -73,24 +73,28 @@ def post_view(request, username, post_id):
     }
     return render(request, "post.html", context)
 
+
 @login_required
 def post_edit(request, username, post_id):
-    """Редактирование поста Post"""
-    post = get_object_or_404(Post, id=post_id)
+    """Страница редактирования поста post_edit"""
+    profile = get_object_or_404(User, username=username)
+    post = get_object_or_404(Post, pk=post_id, author=profile)
+
+    if request.user != profile:
+        return redirect('post', username=username, post_id=post_id)
+
     if request.method != "POST":
         form = PostForm(instance=post)
         context = {
             "form": form,
             "is_edit": True,
         }
-        return render(request, "add_or_change_post.html", context)
+        return render(request, 'add_or_change_post.html', context)
+
     form = PostForm(request.POST or None, files=request.FILES or None, instance=post)
     if form.is_valid():
-        change_post = form.save(commit=False)
-        change_post.author = request.user
-        change_post.save()
-        return redirect("post", username=username, post_id=post_id)
-
+        form.save()
+        return redirect("post", username=request.user.username, post_id=post_id)
 
 
 def page_not_found(request, exception):

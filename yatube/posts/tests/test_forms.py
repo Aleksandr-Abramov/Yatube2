@@ -26,7 +26,6 @@ class PostFormTest(TestCase):
 
     def setUp(self) -> None:
         """Тестовые пользователи"""
-        self.user = get_user_model().objects.create_user(username="Leon")
         self.authorized_guest = Client()
         self.authorized_guest.force_login(self.user)
 
@@ -55,7 +54,7 @@ class PostFormTest(TestCase):
         }
 
         response = self.authorized_guest.post(
-            reverse("post_edit", args=[self.user, 1]),
+            reverse("post_edit", args=["Alex", 1]),
             data=form_data,
             follow=True
         )
