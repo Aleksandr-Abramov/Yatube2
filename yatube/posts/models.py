@@ -29,7 +29,7 @@ class Post(models.Model):
         help_text="Названия сообщества по интересам."
     )
 
-
+    image = models.ImageField(upload_to='posts/', blank=True, null=True)
 
     class Meta:
         ordering = ["-pub_date"]

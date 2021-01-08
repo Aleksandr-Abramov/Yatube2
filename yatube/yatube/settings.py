@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'posts',
     'users',
     'about',
+    'sorl.thumbnail',
 
 
     'django.contrib.admin',
@@ -134,5 +135,8 @@ LOGIN_REDIRECT_URL = "index"
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
