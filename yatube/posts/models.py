@@ -29,6 +29,8 @@ class Post(models.Model):
         help_text="Названия сообщества по интересам."
     )
 
+
+
     class Meta:
         ordering = ["-pub_date"]
 

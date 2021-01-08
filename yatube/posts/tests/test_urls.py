@@ -77,6 +77,11 @@ class StaticURLTests(TestCase):
         response = self.guest_client.get(reverse("post_edit", args=[self.user, 1]))
         self.assertEqual(response.status_code, 302)
 
+    def test_page404(self):
+        """Проверка пустой страницы. Статус код 404"""
+        response = self.guest_client.get("404/")
+        self.assertEqual(response.status_code, 404, "Статус код 200???")
+
     # def test_new_redirect(self):
     #     form_data = {
     #         "text": "test-text",

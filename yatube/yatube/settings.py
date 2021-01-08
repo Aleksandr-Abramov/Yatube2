@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'users',
     'about',
 
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -133,3 +134,5 @@ LOGIN_REDIRECT_URL = "index"
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+

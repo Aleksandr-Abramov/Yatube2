@@ -90,3 +90,19 @@ def post_edit(request, username, post_id):
         change_post.author = request.user
         change_post.save()
         return redirect("post", username=username, post_id=post_id)
+
+
+
+def page_not_found(request, exception):
+    """Страница ошибки 404"""
+    return render(
+        request,
+        "misc/404.html",
+        {"path": request.path},
+        status=404
+    )
+
+
+def server_error(request):
+    """Страница ошибки 500"""
+    return render(request, "misc/500.html", status=500)
