@@ -1,5 +1,7 @@
 {% extends "base.html" %}
+{% load user_filters %}
 {% block title %}Зарегистрироваться{% endblock %}
+{% block header %}<h1>Зарегистрироваться</h1>{% endblock %}
 {% block content %}
 
 <div class="row justify-content-center">
@@ -10,7 +12,7 @@
 
                 {% for error in form.errors %}
                     <div class="alert alert-danger" role="alert">
-                        {{ error }}
+                        {{ error|escape }}
                     </div>
                 {% endfor %}
 
@@ -30,8 +32,8 @@
                             <span class="required">*</span>{% endif %}
                         </label>
                         <div class="col-md-6">
-                            {{ field }}
-                            {% if field.help_text %}
+                            {{ field|addclass:"form-control" }}
+                            {% if field.help_text|safe %}
                             <small id="{{ field.id_for_label }}-help" class="form-text text-muted">{{ field.help_text|safe }}</small>
                             {% endif %}
                         </div>

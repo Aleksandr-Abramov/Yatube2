@@ -4,8 +4,8 @@ from django.core.paginator import Paginator
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required
 
-from .models import Post, Group, User
-from .forms import PostForm
+from .models import Post, Group, User, Comment
+from .forms import PostForm, FormComments
 
 
 def index(request):
@@ -67,9 +67,15 @@ def profile(request, username):
 
 def post_view(request, username, post_id):
     """Просмотр записи Post"""
-    post = get_object_or_404(Post, id=post_id)
+    post = get_object_or_404(Post, id=post_id, author__username=username)
+    author_posts = post.author
+    comments = post.comments.all()
+    form = FormComments()
     context = {
-        "post": post
+        "author_posts": author_posts,
+        "post": post,
+        "form": form,
+        "comments": comments
     }
     return render(request, "post.html", context)
 
@@ -97,6 +103,28 @@ def post_edit(request, username, post_id):
         return redirect("post", username=request.user.username, post_id=post_id)
 
 
+def add_comment(request, username, post_id):
+    """Форма комментариев"""
+    post = get_object_or_404(Post, id=post_id)
+    author = get_object_or_404(User, username=request.user)
+
+    if request.method != "POST":
+        form = FormComments()
+        context = {
+            "form": form
+        }
+        return render(request, "includes/comments.html", context)
+
+    form = FormComments(request.POST)
+
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.post = post
+        comment.author = author
+        comment.save()
+        return redirect("post", username=username, post_id=post_id)
+
+
 def page_not_found(request, exception):
     """Страница ошибки 404"""
     return render(
@@ -110,3 +138,5 @@ def page_not_found(request, exception):
 def server_error(request):
     """Страница ошибки 500"""
     return render(request, "misc/500.html", status=500)
+
+
